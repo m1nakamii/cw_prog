@@ -3,13 +3,46 @@
 #include <time.h>
 #include "sorts.h"
 #include <ctype.h>
+
+void printArray(int* arr, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+void generateAscending(int* arr, int n) {
+    srand(time(NULL));
+    int step = 100000 / n;  // Шаг изменения значений
+
+    for (int i = 0; i < n; i++) {
+        arr[i] = i * step + rand() % step;
+    }
+}
+
+void generateDescending(int* arr, int n) {
+    srand(time(NULL));
+    int step = 100000 / n;  // Шаг изменения значений
+
+    for (int i = 0; i < n; i++) {
+        arr[i] = (n - i - 1) * step + rand() % step;
+    }
+}
+
+void generateRandom(int* arr, int n) {
+    srand(time(NULL));
+    for (int i = 0; i < n; i++) {
+        arr[i] = rand() % 100000;
+    }
+}
+
 int main() {
     int n;
     char input[100];  // Буфер для считывания ввода пользователя
 
     printf("Введите размер массива: ");
     scanf("%s", input);
-    
+
     // Проверка каждого символа в строке на то, является ли он цифрой
     for (int i = 0; input[i] != '\0'; i++) {
         if (!isdigit(input[i])) {
@@ -17,14 +50,13 @@ int main() {
             return 0;
         }
     }
-    
+
     n = atoi(input);  // Преобразование строки в целое число
-    
+
     if (n <= 0) {
         printf("Размер массива должен быть положительным числом.\n");
         return 0;
     }
-    
 
     int* arr = (int*)malloc(n * sizeof(int));
     if (arr == NULL) {
@@ -32,13 +64,32 @@ int main() {
         return 1;
     }
 
-    srand(time(NULL));  // Инициализация генератора случайных чисел
+    // Выбор типа данных для экспериментов
+    int choice;
+    printf("Выберите тип данных для экспериментов:\n");
+    printf("1. Упорядоченные данные (по возрастанию)\n");
+    printf("2. Упорядоченные данные (по убыванию)\n");
+    printf("3. Случайные данные\n");
+    printf("Ваш выбор: ");
+    scanf("%d", &choice);
 
-    for (int i = 0; i < n; i++) {
-        arr[i] = rand() % 10;  // Генерация случайного числа от 0 до 9
+    switch (choice) {
+        case 1:
+            generateAscending(arr, n);
+            break;
+        case 2:
+            generateDescending(arr, n);
+            break;
+        case 3:
+            generateRandom(arr, n);
+            break;
+        default:
+            printf("Некорректный выбор.\n");
+            free(arr);
+            return 0;
     }
 
-    //Выделяем память для отсортированных массивов
+    // Выделяем память для отсортированных массивов
     int* shellarr = (int*)malloc(n * sizeof(int));
     if (shellarr == NULL) {
         printf("Ошибка выделения памяти.\n");
@@ -53,6 +104,7 @@ int main() {
     if (mergearr == NULL) {
         printf("Ошибка выделения памяти.\n");
         free(arr);
+        free(shellarr);
         return 1;
     }
     for (int i = 0; i < n; i++) {
@@ -79,7 +131,6 @@ int main() {
     printf("Merge sort завершена за %.5f секунд.\n", cpu_time_used);
 
     // Вывод массивов (если выбрано пользователем)
-    int choice;
     printf("Хотите вывести отсортированные массивы? (1 - Да, 0 - Нет): ");
     scanf("%d", &choice);
 
@@ -96,6 +147,7 @@ int main() {
 
     free(arr);
     free(shellarr);
+    free(mergearr);
 
     return 0;
 }
