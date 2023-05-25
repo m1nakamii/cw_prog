@@ -4,60 +4,8 @@
 #include "sorts.h"
 #include <ctype.h>
 
-void printArray(int* arr, int n) {
-    for (int i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-}
-
-void generateAscending(int* arr, int n) {
-    srand(time(NULL));
-    int step = 100000 / n;  // Шаг изменения значений
-
-    for (int i = 0; i < n; i++) {
-        arr[i] = i * step + rand() % step;
-    }
-}
-
-void generateDescending(int* arr, int n) {
-    srand(time(NULL));
-    int step = 100000 / n;  // Шаг изменения значений
-
-    for (int i = 0; i < n; i++) {
-        arr[i] = (n - i - 1) * step + rand() % step;
-    }
-}
-
-void generateRandom(int* arr, int n) {
-    srand(time(NULL));
-    for (int i = 0; i < n; i++) {
-        arr[i] = rand() % 100000;
-    }
-}
-
 int main() {
-    int n;
-    char input[100];  // Буфер для считывания ввода пользователя
-
-    printf("Введите размер массива: ");
-    scanf("%s", input);
-
-    // Проверка каждого символа в строке на то, является ли он цифрой
-    for (int i = 0; input[i] != '\0'; i++) {
-        if (!isdigit(input[i])) {
-            printf("Введено некорректное значение. Размер массива должен быть положительным числом.\n");
-            return 0;
-        }
-    }
-
-    n = atoi(input);  // Преобразование строки в целое число
-
-    if (n <= 0) {
-        printf("Размер массива должен быть положительным числом.\n");
-        return 0;
-    }
-
+    int n = 256;
     int* arr = (int*)malloc(n * sizeof(int));
     if (arr == NULL) {
         printf("Ошибка выделения памяти.\n");
